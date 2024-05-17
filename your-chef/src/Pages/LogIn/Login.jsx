@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../Providers/AuthProvider";
 import loginimg from "../../assets/others/authentication2.png";
 import { useForm } from "react-hook-form";
@@ -15,9 +15,12 @@ const Login = () => {
   const [isChecked, setIsChecked] = useState(false);
   const [email, setEmail] = useState("");
 
+  useEffect(() => {
+    setEmail(isChecked ? "admintest@gmail.com" : "test@gmail.com");
+  }, [isChecked]);
+
   const handleCheckboxChange = (event) => {
     setIsChecked(event.target.checked);
-    setEmail(event.target.checked ? "admintest@gmail.com" : "test@gmail.com");
   };
 
   const from = location.state?.from?.pathname || "/";
@@ -29,6 +32,7 @@ const Login = () => {
   } = useForm();
 
   const onSubmit = (data) => {
+    console.log("current email", data.email);
     Login(data.email, data.password)
       .then(() => {
         setError("");
@@ -62,7 +66,8 @@ const Login = () => {
                     type="email"
                     placeholder="email"
                     className="input input-bordered"
-                    defaultValue={email}
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                   />
 
                   {/* {errors.email && (
